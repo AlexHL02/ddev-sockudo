@@ -2,14 +2,49 @@
 services:
   sockudo:
     container_name: ddev-${DDEV_SITENAME}-sockudo
-    image: ${SOCKUDO_DOCKER_IMAGE:-ddev/ddev-utilities:latest}
-    command: tail -f /dev/null
+    image: ${SOCKUDO_DOCKER_IMAGE:-ubuntu:22.04}-${DDEV_SITENAME}-built
+    build:
+      dockerfile_inline: |
+        ARG SOCKUDO_DOCKER_IMAGE="scratch"
+        FROM $${SOCKUDO_DOCKER_IMAGE}
+        ARG SOCKUDO_VERSION=v4.5.1
+        ARG TARGETARCH
+        RUN command -v apk >/dev/null 2>&1 || { (apt-get update || true) && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*; }
+        RUN set -e && \
+            if [ "$$TARGETARCH" = "arm64" ]; then SUFFIX="aarch64-unknown-linux-musl"; else SUFFIX="x86_64-unknown-linux-musl"; fi && \
+            curl -fsSL "https://github.com/sockudo/sockudo/releases/download/$${SOCKUDO_VERSION}/sockudo-$${SOCKUDO_VERSION}-$${SUFFIX}.tgz" \
+                -o /tmp/sockudo.tgz && \
+            tar -xzf /tmp/sockudo.tgz -C /tmp/ && \
+            find /tmp -name 'sockudo' -maxdepth 3 -type f -exec install -m 755 {} /usr/local/bin/sockudo \; && \
+            rm -f /tmp/sockudo.tgz
+      args:
+        SOCKUDO_DOCKER_IMAGE: ${SOCKUDO_DOCKER_IMAGE:-ubuntu:22.04}
+        SOCKUDO_VERSION: ${SOCKUDO_VERSION:-v4.5.1}
+    hostname: ${SOCKUDO_HOSTNAME:-sockudo}
     restart: "no"
-    # These labels ensure this service is discoverable by DDEV.
+    command: /mnt/ddev_config/commands/sockudo/sockudo.sh
     labels:
       com.ddev.site-name: ${DDEV_SITENAME}
       com.ddev.approot: ${DDEV_APPROOT}
-
+    environment:
+      - SOCKUDO_HOST=${SOCKUDO_HOST:-0.0.0.0}
+      - SOCKUDO_PORT=${SOCKUDO_PORT:-6001}
+      - SOCKUDO_APP_ID=${SOCKUDO_APP_ID:-app-id}
+      - SOCKUDO_APP_KEY=${SOCKUDO_APP_KEY:-app-key}
+      - SOCKUDO_APP_SECRET=${SOCKUDO_APP_SECRET:-app-secret}
+      - SOCKUDO_REDIS_HOST=${SOCKUDO_REDIS_HOST:-redis}
+      - SOCKUDO_REDIS_PORT=${SOCKUDO_REDIS_PORT:-6379}
+      - SOCKUDO_REDIS_DB=${SOCKUDO_REDIS_DB:-0}
+      - SOCKUDO_METRICS_ENABLED=${SOCKUDO_METRICS_ENABLED:-false}
+      - VIRTUAL_HOST=$DDEV_HOSTNAME
+      - HTTP_EXPOSE=${SOCKUDO_PORT:-6001}:6001
+      - HTTPS_EXPOSE=${SOCKUDO_HTTPS_PORT:-6002}:6001
+    expose:
+      - "6001"
     volumes:
       - ".:/mnt/ddev_config"
       - "ddev-global-cache:/mnt/ddev-global-cache"
+    x-ddev:
+      describe-url-port: "6001"
+      describe-info: |
+        Sockudo WebSocket server (Pusher-compatible)
