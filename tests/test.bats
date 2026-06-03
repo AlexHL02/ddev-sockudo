@@ -10,7 +10,7 @@
 # To exclude release tests:
 #   bats ./tests/test.bats --filter-tags '!release'
 # For debugging:
-#   bats ./tests/test.bats --show-output-of-passing-tests --verbose-run --print-output-on-failure
+  #   bats ./tests/test.bats --show-output-of-passing-tests --verbose-run --print-output-on-failure
 
 setup() {
   set -eu -o pipefail
@@ -39,10 +39,13 @@ setup() {
 }
 
 health_checks() {
-  run curl -sf http://${PROJNAME}.ddev.site:6001
-  assert_output --partial "OK"
+  run ddev describe
+  assert_success
+  assert_output --partial "sockudo"
+
   run ddev logs -s sockudo
-  assert_output --partial "Listening"
+  assert_success
+  assert_output --partial "HTTP server listening on http://0.0.0.0:6001"
 }
 
 teardown() {
