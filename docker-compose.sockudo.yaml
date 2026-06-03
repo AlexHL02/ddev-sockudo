@@ -9,7 +9,7 @@ services:
         FROM $${SOCKUDO_DOCKER_IMAGE}
         ARG SOCKUDO_VERSION=v4.5.1
         ARG TARGETARCH
-        RUN command -v apk >/dev/null 2>&1 || { (apt-get update || true) && apt-get install -y --no-install-recommends curl && rm -rf /var/lib/apt/lists/*; }
+        RUN command -v apk >/dev/null 2>&1 || { (apt-get update || true) && apt-get install -y --no-install-recommends ca-certificates curl && rm -rf /var/lib/apt/lists/*; }
         RUN set -e && \
             if [ "$$TARGETARCH" = "arm64" ]; then SUFFIX="aarch64-unknown-linux-musl"; else SUFFIX="x86_64-unknown-linux-musl"; fi && \
             curl -fsSL "https://github.com/sockudo/sockudo/releases/download/$${SOCKUDO_VERSION}/sockudo-$${SOCKUDO_VERSION}-$${SUFFIX}.tgz" \
