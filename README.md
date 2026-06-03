@@ -72,6 +72,7 @@ All customization options (use with caution):
 | `SOCKUDO_REDIS_HOST` | `--sockudo-redis-host` | `redis` |
 | `SOCKUDO_REDIS_PORT` | `--sockudo-redis-port` | `6379` |
 | `SOCKUDO_REDIS_DB` | `--sockudo-redis-db` | `0` |
+| `SOCKUDO_REDIS_PASSWORD` | `--sockudo-redis-password` | `` |
 | `SOCKUDO_METRICS_ENABLED` | `--sockudo-metrics-enabled` | `false` |
 
 ## Credits
