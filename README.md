@@ -25,6 +25,25 @@ After installation, make sure to commit the `.ddev` directory to version control
 | `ddev describe` | View service status and used ports for Sockudo |
 | `ddev logs -s sockudo` | Check Sockudo logs |
 
+## Connecting
+
+Use the following URLs to connect your Pusher-compatible client:
+
+| Protocol | URL |
+| -------- | --- |
+| WebSocket (WS) | `ws://<project>.ddev.site:6001/app/<SOCKUDO_APP_KEY>` |
+| WebSocket Secure (WSS) | `wss://<project>.ddev.site:6002/app/<SOCKUDO_APP_KEY>` |
+
+With the default credentials:
+
+```
+host:   <project>.ddev.site
+port:   6001 (ws) / 6002 (wss)
+key:    app-key
+secret: app-secret
+app_id: app-id
+```
+
 ## Advanced Customization
 
 To change the Sockudo version:
