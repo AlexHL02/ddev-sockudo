@@ -46,6 +46,12 @@ services:
       - ".:/mnt/ddev_config"
       - "ddev-global-cache:/mnt/ddev-global-cache"
     x-ddev:
-      describe-url-port: "6001"
+      describe-url-port: "wss://:6002"
       describe-info: |
-        Sockudo WebSocket server (Pusher-compatible)
+        Sockudo WebSocket server
+        host: ${SOCKUDO_HOST:-0.0.0.0}
+        http port: ${SOCKUDO_PORT:-6001}
+        https port: ${SOCKUDO_HTTPS_PORT:-6002}
+        app_id: ${SOCKUDO_APP_ID:-app-id}
+        app_key: ${SOCKUDO_APP_KEY:-app-key}
+        app_secret: ${SOCKUDO_APP_SECRET:-app-secret}
