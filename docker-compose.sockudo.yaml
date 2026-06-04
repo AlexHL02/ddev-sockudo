@@ -46,9 +46,12 @@ services:
       - ".:/mnt/ddev_config"
       - "ddev-global-cache:/mnt/ddev-global-cache"
     x-ddev:
-      describe-url-port: "wss://:6002"
+      describe-url-port: |
+        ws://${DDEV_SITENAME}.ddev.site:${SOCKUDO_PORT:-6001}/app/${SOCKUDO_APP_KEY:-app-key}
+        wss://${DDEV_SITENAME}.ddev.site:${SOCKUDO_HTTPS_PORT:-6002}/app/${SOCKUDO_APP_KEY:-app-key}
       describe-info: |
         Sockudo WebSocket server
+
         host: ${SOCKUDO_HOST:-0.0.0.0}
         http port: ${SOCKUDO_PORT:-6001}
         https port: ${SOCKUDO_HTTPS_PORT:-6002}
