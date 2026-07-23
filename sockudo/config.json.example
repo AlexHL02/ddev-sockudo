@@ -1,0 +1,50 @@
+{
+  "debug": false,
+  "host": "0.0.0.0",
+  "port": 6001,
+  "adapter": {
+    "driver": "redis"
+  },
+  "cache": {
+    "driver": "redis"
+  },
+  "queue": {
+    "driver": "redis"
+  },
+  "rate_limiter": {
+    "enabled": false,
+    "driver": "redis"
+  },
+  "database": {
+    "redis": {
+      "host": "redis",
+      "port": 6379,
+      "db": 0,
+      "password": null,
+      "key_prefix": "sockudo:"
+    }
+  },
+  "app_manager": {
+    "driver": "memory",
+    "array": {
+      "apps": [
+        {
+          "id": "app-id",
+          "key": "app-key",
+          "secret": "app-secret",
+          "enabled": true,
+          "max_connections": 100000,
+          "enable_client_messages": true,
+          "enabled_user_authentication": true
+        }
+      ]
+    }
+  },
+  "cors": {
+    "credentials": true,
+    "origin": ["*"]
+  },
+  "metrics": {
+    "enabled": false
+  }
+}

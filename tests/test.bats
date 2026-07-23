@@ -70,6 +70,24 @@ teardown() {
   health_checks
 }
 
+@test "install with custom config.json" {
+  set -eu -o pipefail
+  echo "# ddev add-on get ${DIR} with project ${PROJNAME} in $(pwd)" >&3
+  run ddev add-on get "${DIR}"
+  assert_success
+
+  mkdir -p .ddev/sockudo
+  cp .ddev/sockudo/config.json.example .ddev/sockudo/config.json
+
+  run ddev restart -y
+  assert_success
+
+  run ddev logs -s sockudo
+  assert_success
+  assert_output --partial "Using custom Sockudo configuration: /mnt/ddev_config/sockudo/config.json"
+  assert_output --partial "HTTP server listening on http://0.0.0.0:6001"
+}
+
 # bats test_tags=release
 @test "install from release" {
   set -eu -o pipefail

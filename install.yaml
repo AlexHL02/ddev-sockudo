@@ -3,8 +3,16 @@ name: sockudo
 project_files:
   - docker-compose.sockudo.yaml
   - commands/sockudo/sockudo.sh
+  - sockudo/config.json.example
 
 ddev_version_constraint: '>= v1.24.10'
 
 dependencies:
   - ddev/ddev-redis
+
+post_install_actions:
+  - |
+    #ddev-description: Notify about optional Sockudo config.json
+    if [ ! -f "${DDEV_APPROOT}/.ddev/sockudo/config.json" ]; then
+      echo "To fully customize Sockudo (apps, adapters, CORS, etc.), copy .ddev/sockudo/config.json.example to .ddev/sockudo/config.json and edit it, then run 'ddev restart'."
+    fi

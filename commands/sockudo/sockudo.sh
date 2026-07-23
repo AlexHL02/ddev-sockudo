@@ -6,6 +6,17 @@
 
 export HOST=${SOCKUDO_HOST:-0.0.0.0}
 export PORT=${SOCKUDO_PORT:-6001}
+
+CONFIG_FILE=/mnt/ddev_config/sockudo/config.json
+
+# If the project ships a custom .ddev/sockudo/config.json, let it take over
+# app/adapter/cache/queue configuration. HOST/PORT are still forced above so
+# the server keeps listening where ddev's routing expects it.
+if [ -f "$CONFIG_FILE" ]; then
+  echo "Using custom Sockudo configuration: $CONFIG_FILE"
+  exec sockudo --config "$CONFIG_FILE"
+fi
+
 export DATABASE_REDIS_HOST=${SOCKUDO_REDIS_HOST:-redis}
 export DATABASE_REDIS_PORT=${SOCKUDO_REDIS_PORT:-6379}
 export DATABASE_REDIS_DB=${SOCKUDO_REDIS_DB:-0}

@@ -46,6 +46,23 @@ app_id: app-id
 
 ## Advanced Customization
 
+### Custom `config.json`
+
+For anything beyond the environment variables below (multiple apps, per-app policies,
+custom CORS, channel namespaces, delta compression, etc.), you can supply Sockudo's own
+[configuration file](https://sockudo.io/docs/reference/configuration):
+
+```bash
+cp .ddev/sockudo/config.json.example .ddev/sockudo/config.json
+```
+
+Edit `.ddev/sockudo/config.json` as needed, then run `ddev restart`. Once this file exists,
+it fully replaces the app/adapter/cache/queue defaults normally derived from the
+`SOCKUDO_*` environment variables below — `SOCKUDO_HOST`/`SOCKUDO_PORT` are still applied on
+top so the server keeps listening where ddev's routing expects it, but everything else in
+`config.json` is authoritative. Make sure to commit `.ddev/sockudo/config.json` to version
+control.
+
 To change the Sockudo version:
 
 ```bash
