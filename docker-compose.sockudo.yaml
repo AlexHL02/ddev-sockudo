@@ -44,7 +44,6 @@ services:
       - "6001"
     volumes:
       - ".:/mnt/ddev_config"
-      - "ddev-global-cache:/mnt/ddev-global-cache"
     x-ddev:
       describe-url-port: |
         ws://${DDEV_SITENAME}.ddev.site:${SOCKUDO_PORT:-6001}/app/${SOCKUDO_APP_KEY:-app-key}
